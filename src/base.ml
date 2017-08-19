@@ -29,9 +29,9 @@ let times n m =
 
 (*** DSL ***)
 (* syntax *)
-type exp = Plus of nat * nat    (* _1 plus _2 *)
-         | Times of nat * nat   (* _1 times _2 *)
-type prop = Eq of exp * nat     (* _1 is _2 *)
+type exp = Plus of nat * nat    (* _0 plus _1 *)
+         | Times of nat * nat   (* _0 times _1 *)
+type prop = Eq of exp * nat     (* _0 is _1 *)
 
 
 (** 処理系 **)
@@ -50,10 +50,10 @@ let exp_run: exp -> nat = function
 
 (* AST *)
 type derive_tree = 
-    PZero of nat                              (* Z plus _1 is _1 *)
-  | PSucc of (nat * nat * nat) * derive_tree  (* (_1 plus _2 is _3) と部分木 *)
+    PZero of nat                              (* Z plus _0 is _0 *)
+  | PSucc of (nat * nat * nat) * derive_tree  (* (_0 plus _1 is _2) と部分木 *)
   | TZero of nat                              (* Z times n is Z *)
-  | TSucc of (nat * nat * nat) * (derive_tree * derive_tree)  (* [_1 times _2 is ?; _2 plus ? is _3] と部分木の組 *)
+  | TSucc of (nat * nat * nat) * (derive_tree * derive_tree)  (* [_0 times _1 is n3; _1 plus n3 is _2] と部分木の組 *)
 
 
 let rec gen_eqtree: exp -> nat -> derive_tree = fun left right ->
