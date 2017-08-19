@@ -38,10 +38,10 @@ type prop = Eq of exp * nat     (* _1 is _2 *)
 let string_of_exp: exp -> string = function
   | Plus (n, m) ->
     let (ns, ms) = (string_of_nat n, string_of_nat m) in
-    ns ^ " plus " ^ ms
+    sprintf "%s plus %s" ns ms
   | Times (n, m) ->
     let (ns, ms) = (string_of_nat n, string_of_nat m) in
-    ns ^ " times " ^ ms
+    sprintf "%s times %s" ns ms
 
 let exp_run: exp -> nat = function
   | Plus (n, m) -> plus n m
@@ -88,30 +88,30 @@ let prop_to_derivetree: prop -> derive_tree = function
 
 let paren: string -> string -> string -> string =
   fun indent node subtreestr ->
-    indent ^ node ^ " {\n" ^ subtreestr ^ "\n" ^ indent ^ "}"
+    sprintf "%s%s {\n%s\n%s}" indent node subtreestr indent
 
 let derivetree_printer: derive_tree -> string = fun derivetree ->
   let rec printer derivetree indent =
     match derivetree with
     | PZero n ->
         let res = string_of_nat n
-        in indent ^ "Z plus " ^ res ^ " is " ^ res ^ " by P-Zero {}"
+        in indent ^ sprintf "Z plus %s is %s by P-Zero {}" res res
     | PSucc ((n, m, o), subtree) ->
         let son = string_of_nat in
         let (a, b, c) = (son n, son m, son o) in
-        let node = a ^ " plus " ^ b ^ " is " ^ c ^ " by P-Succ"
+        let node = sprintf "%s plus %s is %s by P-Succ" a b c
         and subtreestr = printer subtree (indent ^ "  ") in
         paren indent node subtreestr
     | TZero n ->
         let res = string_of_nat n
-        in indent ^ "Z times " ^ res ^ " is Z by P-Zero {}"
+        in indent ^ sprintf "Z times %s is Z by T-Zero {}" res
     | TSucc ((n, m, o), (subL, subR)) ->
         let son = string_of_nat in
         let (a, b, c) = (son n, son m, son o) in
-        let node = a ^ " times " ^ b ^ " is " ^ c ^ " by T-Succ"
+        let node = sprintf "%s times %s is %s by T-Succ" a b c
         and subLstr = printer subL (indent ^ "  ")
         and subRstr = printer subR (indent ^ "  ") in
-        paren indent node @@ subLstr ^ ";\n" ^ indent ^ subRstr
+        paren indent node @@ sprintf "%s;\n%s%s" subLstr indent subRstr
   in printer derivetree ""
 
 
@@ -127,4 +127,4 @@ let prop_interpreter: prop -> bool = function
 
 let exp_printer: exp -> string = string_of_exp
 let prop_printer: prop -> string = function
-  | Eq (l, r) -> string_of_exp l ^ " is " ^ string_of_nat r
+  | Eq (l, r) -> sprintf "%s is %s" (string_of_exp l) (string_of_nat r)
