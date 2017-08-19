@@ -57,22 +57,16 @@ type derive_tree =
 
 
 let rec gen_eqtree: exp -> nat -> derive_tree = fun left right ->
-  match left with
-  | Plus(Z, n) ->
-    if n = right then PZero n
-    else failwith "not equal"
-  | Plus(S n, m) -> (
-      match right with
-      | Z -> failwith "not equal"
-      | S o -> PSucc ((S n, m, S o), gen_eqtree (Plus (n, m)) o)
-    )
-  | Times (Z, n) -> (
-      match right with
-      | Z -> TZero n
-      | S _ -> failwith "not equal"
-    )
-  | Times (S n1, n2) ->
-      let n4 = right in
+  match (left, right) with
+  | (Plus(Z, n), right') ->
+      if n = right' then PZero n
+      else failwith "not equal"
+  | (Plus(S n1, n2), Z) -> failwith "not equal"
+  | (Plus(S n1, n2), S n3) ->
+      PSucc ((S n1, n2, S n3), gen_eqtree (Plus (n1, n2)) n3)
+  | (Times(Z, n), Z) -> TZero n
+  | (Times(Z, n), S _) -> failwith "not equal"
+  | (Times (S n1, n2), n4) ->
       let n3 =
         let res = minus n4 n2 in (
           match res with
