@@ -3,6 +3,8 @@
 *.cmo
 *.cma
 *.cmi
+*.cmt
+*.cmti
 *.a
 *.o
 *.cmx

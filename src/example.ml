@@ -1,3 +1,6 @@
+(* #load "compareNat.cma" *)
+open CompareNat
+
 (*** example ***)
 let _ = generator @@ Eq (Plus(Z, S (S Z)), S (S Z));;
 let _ = generator @@ Eq (Plus(S (S Z), Z), S (S Z));;
