@@ -1,10 +1,11 @@
 (* syntax *)
 type nat = Z | S of nat
 
-type exp = Plus of nat * nat    (* _0 plus _1 *)
-         | Times of nat * nat   (* _0 times _1 *)
+type exp = Plus of nat * nat
+         | Times of nat * nat
 
-type prop = Eq of exp * nat     (* _0 is _1 *)
+type prop = Eq of exp * nat
+          | LessThan of nat * nat
 
 
 (* processor *)
@@ -14,5 +15,7 @@ val exp_printer: exp -> string
 val prop_interpreter: prop -> bool
 val prop_printer: prop -> string
 
-val generator: prop -> unit
+val generator1: prop -> unit
+(* val generator2: prop -> unit *)
+(* val generator3: prop -> unit *)
 
