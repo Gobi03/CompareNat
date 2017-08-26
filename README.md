@@ -8,9 +8,9 @@ $ make
 ```
 
 ## 使い方
-初めに、REPL上で以下を実行して読み込む.
+初めに、以下を実行する.
 ```
-# #load "compareNat.cma";;
+~/CompareNat/src$ ocaml compareNat.cma
 # open CompareNat;;
 ```
 

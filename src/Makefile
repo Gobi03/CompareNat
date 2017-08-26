@@ -1,14 +1,13 @@
 OCAMLC = ocamlfind ocamlc
-OCAMLDEP = ocamlfind ocamldep
 
-OBJS = compareNat.cmi compareNat.cmo
-LIBS = natCalc.cmo
+OBJS = natCalc.cmi natCalc.cmo \
+       compareNat.cmi compareNat.cmo
 
 .PHONY: all
 all: compareNat.cma
 
-compareNat.cma: ${LIBS} ${OBJS}
-	${OCAMLC} -a -o $@ ${filter %.cmo,${OBJS}}
+compareNat.cma: ${OBJS}
+	${OCAMLC} -a -o $@ $(filter-out %.cmi,$^)
 
 .SUFFIXES: .ml .mli .cmi .cmo
 %.cmi: %.mli
