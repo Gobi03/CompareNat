@@ -36,7 +36,7 @@ module CompNat1 = struct
     | TZero of nat                              (* Z times n is Z *)
     | TSucc of (nat * nat * nat) * (derive_tree * derive_tree)  (* [_0 times _1 is n3; _1 plus n3 is _2] と部分木の組 *)
     | LSucc of nat                              (* _0 is less than S(_0) *)
-    | LTrans of (nat * nat) * (derive_tree * derive_tree)       (* _0 is less than _1 *)
+    | LTrans of (nat * nat) * (derive_tree * derive_tree)       (* [_0 is less than _1 と部分木の組] *)
 
   let rec gen_eqtree: exp -> nat -> derive_tree = fun left right ->
     match (left, right) with
@@ -117,11 +117,90 @@ module CompNat1 = struct
 end
 
 
+module CompNat2 = struct
+  type derive_tree =
+      PZero of nat                              (* Z plus _0 is _0 *)
+    | PSucc of (nat * nat * nat) * derive_tree (* (_0 plus _1 is _2) と部分木 *)
+    | TZero of nat                              (* Z times n is Z *)
+    | TSucc of (nat * nat * nat) * (derive_tree * derive_tree)  (* [_0 times _1 is n3; _1 plus n3 is _2] と部分木の組 *)
+    | LZero of nat                              (* Z is less than S(_0) *)
+    | LSuccSucc of (nat * nat) * derive_tree       (* [S(_0) is less than S(_1)] と部分木 *)
+
+  let rec gen_eqtree: exp -> nat -> derive_tree = fun left right ->
+    match (left, right) with
+    | (Plus(Z, n), right') ->
+      if n = right' then PZero n
+      else failwith "not equal"
+    | (Plus(S n1, n2), Z) -> failwith "not equal"
+    | (Plus(S n1, n2), S n3) ->
+      PSucc ((S n1, n2, S n3), gen_eqtree (Plus (n1, n2)) n3)
+    | (Times(Z, n), Z) -> TZero n
+    | (Times(Z, n), S _) -> failwith "not equal"
+    | (Times (S n1, n2), n4) ->
+      let n3 =
+        let res = minus n4 n2 in (
+          match res with
+          | None -> failwith "not equal"
+          | Some res' -> res'
+        ) in
+      let nextl = gen_eqtree (Times(n1, n2)) n3
+      and nextr = gen_eqtree (Plus(n2, n3)) n4
+      in TSucc ((S n1, n2, n4), (nextl, nextr))
+
+  let rec gen_lttree: nat -> nat -> derive_tree = fun left right ->
+    match (left, right) with
+    | (_, Z) -> failwith "not less than"
+    | (Z, S n) -> LZero n
+    | (S n1, S n2) -> LSuccSucc ((S n1, S n2), (gen_lttree n1 n2))
+
+  let prop_to_derivetree: prop -> derive_tree = function
+    | Eq (left, right) -> gen_eqtree left right
+    | LessThan (left, right) -> gen_lttree left right
+
+  let derivetree_printer: derive_tree -> string = fun derivetree ->
+    let rec printer derivetree indent =
+      match derivetree with
+      | PZero n ->
+        let res = string_of_nat n
+        in indent ^ sprintf "Z plus %s is %s by P-Zero {}" res res
+      | PSucc ((n, m, o), subtree) ->
+        let son = string_of_nat in
+        let (a, b, c) = (son n, son m, son o) in
+        let node = sprintf "%s plus %s is %s by P-Succ" a b c
+        and subtreestr = printer subtree (indent ^ "  ") in
+        paren indent node subtreestr
+      | TZero n ->
+        let res = string_of_nat n
+        in indent ^ sprintf "Z times %s is Z by T-Zero {}" res
+      | TSucc ((n, m, o), (subL, subR)) ->
+        let son = string_of_nat in
+        let (a, b, c) = (son n, son m, son o) in
+        let node = sprintf "%s times %s is %s by T-Succ" a b c
+        and subLstr = printer subL (indent ^ "  ")
+        and subRstr = printer subR (indent ^ "  ") in
+        paren indent node @@ sprintf "%s;\n%s%s" subLstr indent subRstr
+      | LZero n ->
+        let res = string_of_nat n
+        in indent ^ sprintf "Z is less than S(%s) by L-Zero {}" res
+      | LSuccSucc((a, b), subtree) ->
+        let son = string_of_nat in
+        let (n1, n2) = (son a, son b) in
+        let node = sprintf "%s is less than %s by L-SuccSucc" n1 n2
+        and subtreestr = printer subtree (indent ^ "  ") in
+        paren indent node subtreestr
+    in printer derivetree ""
+end
+
 
 let generator1: prop -> unit = fun prop ->
   prop
   |> CompNat1.prop_to_derivetree
   |> CompNat1.derivetree_printer
+  |> print_endline
+let generator2: prop -> unit = fun prop ->
+  prop
+  |> CompNat2.prop_to_derivetree
+  |> CompNat2.derivetree_printer
   |> print_endline
 
 let exp_interpreter: exp -> nat = exp_run
@@ -135,3 +214,4 @@ let prop_printer: prop -> string = function
       sprintf "%s is %s" (string_of_exp l) (string_of_nat r)
   | LessThan (l, r) ->
       sprintf "%s is less than %s" (string_of_nat l) (string_of_nat r)
+
