@@ -17,5 +17,5 @@ val prop_printer: prop -> string
 
 val generator1: prop -> unit
 val generator2: prop -> unit
-(* val generator3: prop -> unit *)
+val generator3: prop -> unit
 
