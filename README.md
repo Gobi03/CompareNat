@@ -47,7 +47,7 @@ S(S(Z)) is less than S(S(S(S(S(Z))))) by L-Trans {
   S(S(Z)) is less than S(S(S(Z))) by L-Succ {};
   S(S(S(Z))) is less than S(S(S(S(S(Z))))) by L-Trans {
     S(S(S(Z))) is less than S(S(S(S(Z)))) by L-Succ {};
-      S(S(S(S(Z)))) is less than S(S(S(S(S(Z))))) by L-Succ {}
+    S(S(S(S(Z)))) is less than S(S(S(S(S(Z))))) by L-Succ {}
   }
 }
 - : unit = ()

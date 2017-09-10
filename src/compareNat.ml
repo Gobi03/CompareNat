@@ -102,7 +102,7 @@ module CompNat1 = struct
         let node = sprintf "%s times %s is %s by T-Succ" a b c
         and subLstr = printer subL (indent ^ "  ")
         and subRstr = printer subR (indent ^ "  ") in
-        paren indent node @@ sprintf "%s;\n%s%s" subLstr indent subRstr
+        paren indent node @@ sprintf "%s;\n%s" subLstr subRstr
       | LSucc n ->
         let res = string_of_nat n
         in indent ^ sprintf "%s is less than S(%s) by L-Succ {}" res res
@@ -112,7 +112,7 @@ module CompNat1 = struct
         let node = sprintf "%s is less than %s by L-Trans" n1 n3
         and subLstr = printer subL (indent ^ "  ")
         and subRstr = printer subR (indent ^ "  ") in
-        paren indent node @@ sprintf "%s;\n%s%s" subLstr indent subRstr
+        paren indent node @@ sprintf "%s;\n%s" subLstr subRstr
     in printer derivetree ""
 end
 
@@ -178,7 +178,7 @@ module CompNat2 = struct
         let node = sprintf "%s times %s is %s by T-Succ" a b c
         and subLstr = printer subL (indent ^ "  ")
         and subRstr = printer subR (indent ^ "  ") in
-        paren indent node @@ sprintf "%s;\n%s%s" subLstr indent subRstr
+        paren indent node @@ sprintf "%s;\n%s" subLstr subRstr
       | LZero n ->
         let res = string_of_nat n
         in indent ^ sprintf "Z is less than S(%s) by L-Zero {}" res
@@ -260,7 +260,7 @@ module CompNat3 = struct
         let node = sprintf "%s times %s is %s by T-Succ" a b c
         and subLstr = printer subL (indent ^ "  ")
         and subRstr = printer subR (indent ^ "  ") in
-        paren indent node @@ sprintf "%s;\n%s%s" subLstr indent subRstr
+        paren indent node @@ sprintf "%s;\n%s" subLstr subRstr
       | LSucc n ->
         let res = string_of_nat n
         in indent ^ sprintf "%s is less than S(%s) by L-Succ {}" res res
