@@ -8,7 +8,7 @@ OBJS = src/natCalc.cmo src/compareNat.cmo
 all: compareNat.cma
 
 compareNat.cma: ${OBJS}
-	${OCAMLC} ${INCLUDES} -a -o $@ $(filter-out %.cmi,$^)
+	${OCAMLC} -a -o $@ $^
 	cp src/compareNat.cmi .
 
 # Common rules
