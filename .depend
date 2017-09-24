@@ -1,0 +1,2 @@
+example.cmo : src/compareNat.cmi
+example.cmx : src/compareNat.cmx

@@ -1,7 +1,9 @@
-OCAMLC = ocamlfind ocamlc
+OCAMLC   = ocamlfind ocamlc
+OCAMLDEP = ocamlfind ocamldep
 
-OBJS = natCalc.cmi natCalc.cmo \
-       compareNat.cmi compareNat.cmo
+INCLUDES = -I src
+OBJS  = natCalc.cmi natCalc.cmo \
+		compareNat.cmi compareNat.cmo
 
 .PHONY: all
 all: compareNat.cma
@@ -9,14 +11,23 @@ all: compareNat.cma
 compareNat.cma: ${OBJS}
 	${OCAMLC} -a -o $@ $(filter-out %.cmi,$^)
 
-.SUFFIXES: .ml .mli .cmi .cmo
+# Common rules
+.SUFFIXES: .ml .mli .cmi .cmo .cmx
 %.cmi: %.mli
-	${OCAMLC} $<
+	${OCAMLC} ${INCLUDES} $<
 %.cmi: %.ml
-	$(OCAMLC) -c $<
+	$(OCAMLC) ${INCLUDES} -c $<
 %.cmo: %.ml %.cmi
-	$(OCAMLC) -c $<
+	$(OCAMLC) ${INCLUDES} -c $<
 
+# Clean up
 .PHONY: clean
 clean:
 	${RM} *.cm[ioxat] *.cmti *.~
+
+# Dependencies
+.PHONY: depend
+depend:
+	$(OCAMLDEP) $(INCLUDES) *.mli *.ml > .depend
+
+include .depend
