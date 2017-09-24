@@ -2,7 +2,7 @@ OCAMLC   = ocamlfind ocamlc
 OCAMLDEP = ocamlfind ocamldep
 
 INCLUDES = -I src
-OBJS  = natCalc.cmi natCalc.cmo \
+OBJS =  natCalc.cmi natCalc.cmo \
 		compareNat.cmi compareNat.cmo
 
 .PHONY: all
@@ -28,6 +28,6 @@ clean:
 # Dependencies
 .PHONY: depend
 depend:
-	$(OCAMLDEP) $(INCLUDES) *.mli *.ml > .depend
+	$(OCAMLDEP) $(INCLUDES) `find -name "*.mli" -or -name "*.ml"` > .depend
 
 include .depend
