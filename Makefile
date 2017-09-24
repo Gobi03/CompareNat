@@ -2,13 +2,14 @@ OCAMLC   = ocamlfind ocamlc
 OCAMLDEP = ocamlfind ocamldep
 
 INCLUDES = -I src
-OBJS = src/compareNat.cmo
+OBJS = src/natCalc.cmo src/compareNat.cmo
 
 .PHONY: all
 all: compareNat.cma
 
 compareNat.cma: ${OBJS}
-	${OCAMLC} -a -o $@ $(filter-out %.cmi,$^)
+	${OCAMLC} ${INCLUDES} -a -o $@ $(filter-out %.cmi,$^)
+	cp src/compareNat.cmi .
 
 # Common rules
 .SUFFIXES: .ml .mli .cmi .cmo
