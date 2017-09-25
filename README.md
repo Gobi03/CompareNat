@@ -2,15 +2,17 @@
 『[プログラミング言語の基礎概念](https://www.fos.kuis.kyoto-u.ac.jp/~igarashi/CoPL/)』の演習システム用の導出木生成DSL
 
 ## ビルド
+Requirement
+- ocamlfind
+
 ```
-$ cd ./CompareNat/src
 $ make
 ```
 
 ## 使い方
 初めに以下を実行.
 ```
-~/CompareNat/src$ ocaml compareNat.cma
+$ ocaml compareNat.cma
 # open CompareNat;;
 ```
 
