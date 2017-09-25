@@ -1,0 +1,7 @@
+./example.cmo : src/compareNat.cmi
+./example.cmx : src/compareNat.cmx
+./src/compareNat.cmo : src/natCalc.cmo ./src/compareNat.cmi
+./src/compareNat.cmx : src/natCalc.cmx ./src/compareNat.cmi
+./src/compareNat.cmi :
+./src/natCalc.cmo :
+./src/natCalc.cmx :
