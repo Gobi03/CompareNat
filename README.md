@@ -2,9 +2,11 @@
 『[プログラミング言語の基礎概念](https://www.fos.kuis.kyoto-u.ac.jp/~igarashi/CoPL/)』の演習システム用の導出木生成DSL
 
 ## ビルド
-Requirement
+### Requirement
 - ocamlfind
+- (ocamldep)
 
+### run
 ```
 $ make
 ```
