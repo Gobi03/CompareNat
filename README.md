@@ -1,25 +1,25 @@
 # CompareNat
 『[プログラミング言語の基礎概念](https://www.fos.kuis.kyoto-u.ac.jp/~igarashi/CoPL/)』の演習システム用の導出木生成DSL
 
-## ビルド
-### Requirement
+# ビルド
+## Requirement
 - ocamlfind
-- (ocamldep)
+- ocamldep
 
-### run
+## run
 ```
-$ make
+src/ $ omake
 ```
 
-## 使い方
+# 使い方
 初めに以下を実行.
 ```
-$ ocaml compareNat.cma
+src/ $ ocaml compareNat.cma
 # open CompareNat;;
 ```
 
-### 使用例
-#### ex) 命題 `S (S Z) plus Z is S (S Z)` の導出木
+## 使用例
+### ex) 命題 `S (S Z) plus Z is S (S Z)` の導出木
 ```
 # let _ = generator1 @@ Eq (Plus(S (S Z), Z), S (S Z));;
 S(S(Z)) plus Z is S(S(Z)) by P-Succ {
@@ -30,7 +30,7 @@ S(S(Z)) plus Z is S(S(Z)) by P-Succ {
 - : unit = ()
 ```
 
-#### ex) 命題:  `S Z times S Z is S Z`
+### ex) 命題:  `S Z times S Z is S Z`
 ```
 # let _ = generator1 @@ Eq (Times(S Z, S Z), S Z);;
 S(Z) times S(Z) is S(Z) by T-Succ {
@@ -42,7 +42,7 @@ S(Z) times S(Z) is S(Z) by T-Succ {
 - : unit = ()
 ```
 
-#### ex) 命題:  `S(S Z) is less than S(S(S Z))`
+### ex) 命題:  `S(S Z) is less than S(S(S Z))`
 generator1 ~ 3 がそれぞれ推論規則 CompareNat1 ~ 3 に基づく導出木を生成する.
 
 ```
@@ -68,7 +68,7 @@ S(S(Z)) is less than S(S(S(S(S(Z))))) by L-SuccSucc {
 ```
 
 
-#### インタプリタとプリティプリンタ
+### インタプリタとプリティプリンタ
 ```
 # let _ = exp_interpreter @@ Plus(S (S Z), Z);;
 - : nat = S (S Z)
