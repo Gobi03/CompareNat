@@ -6,6 +6,15 @@
 
 
 ########################################################################
+# Subdirectories.
+# You may want to include some subdirectories in this project.
+# If so, define the subdirectory targets and uncomment this section.
+#
+
+# .SUBDIRS:
+
+
+########################################################################
 # OCaml configuration.
 # Delete this section if you are not building OCaml files.
 #
